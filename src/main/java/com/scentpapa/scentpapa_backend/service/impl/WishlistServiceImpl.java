@@ -8,7 +8,7 @@ import com.scentpapa.scentpapa_backend.models.WishList;
 import com.scentpapa.scentpapa_backend.repository.ProductRepository;
 import com.scentpapa.scentpapa_backend.repository.WishlistRepository;
 import com.scentpapa.scentpapa_backend.service.WishlistService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
