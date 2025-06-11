@@ -22,4 +22,6 @@ public class OrderDTO {
     private Instant createdAt;
     private Instant updatedAt;
     private List<OrderItemDTO> items;
+    private AddressDTO shippingAddress;
+    private String razorpayOrderId;
 }

@@ -32,6 +32,16 @@ public class Order {
     @Column(name = "total_amount", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalAmount;
 
+    @Column(name = "reference_number")
+    private String referenceNumber;
+
+    @Column(name = "razorpay_order_id")
+    private String razorpayOrderId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_address_id")
+    private Address shippingAddress;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatus status;

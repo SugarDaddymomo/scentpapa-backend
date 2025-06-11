@@ -42,6 +42,12 @@ public class Payment {
     @Column(name = "payment_date", updatable = false, nullable = false)
     private Instant paymentDate;
 
+    @Column(name = "razorpay_refund_id")
+    private String razorpayRefundId;
+
+    @Column(name = "refund_date")
+    private Instant refundDate;
+
     @PrePersist
     protected void onCreate() {
         paymentDate = Instant.now();
