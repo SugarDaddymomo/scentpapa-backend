@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.Instant;
 
 @Entity
 @Data
@@ -17,7 +18,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Link to User
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -26,7 +26,7 @@ public class Address {
     private String residenceName; // e.g. "Home", "Office", "Mom's House"
 
     @Column(nullable = false)
-    private String phoneNumber; // separate from user’s main phone
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String streetAddress;
@@ -48,4 +48,22 @@ public class Address {
 
     @Column(name = "is_default_billing")
     private boolean isDefaultBilling;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Instant.now();
+    }
+
 }
