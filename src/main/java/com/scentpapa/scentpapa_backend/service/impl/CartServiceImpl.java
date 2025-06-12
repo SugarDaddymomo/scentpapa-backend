@@ -92,6 +92,18 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.delete(cartItem);
     }
 
+    @Override
+    @Transactional
+    public void clearUserCart() {
+        User user = ratingService.getCurrentAuthenticatedUser();
+        Cart cart = cartRepository.findByUser(user).orElse(null);
+        if (cart != null && cart.getCartItems() != null) {
+            cart.getCartItems().clear();
+            cartRepository.save(cart);
+        }
+    }
+
+
     private CartDTO mapToCartDTO(Cart cart) {
         double totalAmount = calculateTotalAmount(cart);
         List<CartItemDTO> items = cart.getCartItems().stream()

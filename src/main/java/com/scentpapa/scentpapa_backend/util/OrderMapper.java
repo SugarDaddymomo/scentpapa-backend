@@ -2,10 +2,14 @@ package com.scentpapa.scentpapa_backend.util;
 
 import com.scentpapa.scentpapa_backend.dto.OrderDTO;
 import com.scentpapa.scentpapa_backend.dto.OrderItemDTO;
+import com.scentpapa.scentpapa_backend.dto.UserSummaryDTO;
 import com.scentpapa.scentpapa_backend.models.Order;
 import com.scentpapa.scentpapa_backend.models.OrderItem;
+import com.scentpapa.scentpapa_backend.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +30,26 @@ public class OrderMapper {
                 .items(toOrderItemDtoList(order.getOrderItems()))
                 .razorpayOrderId(order.getRazorpayOrderId())
                 .shippingAddress(addressMapper.toDto(order.getShippingAddress()))
+                .trackingNumber(order.getTrackingNumber())
+                .shippingProvider(order.getShippingProvider())
+                .expectedDeliveryDate(order.getExpectedDeliveryDate())
                 .build();
+    }
+
+    public OrderDTO toDtoAdmin(Order order) {
+        OrderDTO dto = toDto(order);
+        dto.setAdminNotes(StringUtils.hasText(order.getAdminNotes()) ? order.getAdminNotes() : "NA");
+        User user = order.getUser();
+        if (user != null) {
+            UserSummaryDTO userDetails = UserSummaryDTO.builder()
+                    .phoneNumber(user.getPhoneNumber())
+                    .firstName(user.getFirstName())
+                    .lastName(StringUtils.hasText(user.getLastName()) ? user.getLastName() : " ")
+                    .id(user.getId())
+                    .build();
+            dto.setUserDetails(userDetails);
+        }
+        return dto;
     }
 
     private List<OrderItemDTO> toOrderItemDtoList(List<OrderItem> orderItems) {
@@ -44,6 +67,7 @@ public class OrderMapper {
                 .build();
     }
 
+    //TODO: to be removed
     public Order toEntity(OrderDTO orderDTO) {
         Order order = new Order();
         order.setId(orderDTO.getId());

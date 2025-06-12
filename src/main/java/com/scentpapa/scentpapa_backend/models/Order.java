@@ -55,6 +55,18 @@ public class Order {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(name = "tracking_number")
+    private String trackingNumber;
+
+    @Column(name = "shipping_provider")
+    private String shippingProvider;
+
+    @Column(name = "expected_delivery_date")
+    private Instant expectedDeliveryDate;
+
+    @Column(name = "admin_notes", columnDefinition = "TEXT")
+    private String adminNotes;
+
     @PrePersist
     protected void onCreate() {
         createdAt = Instant.now();

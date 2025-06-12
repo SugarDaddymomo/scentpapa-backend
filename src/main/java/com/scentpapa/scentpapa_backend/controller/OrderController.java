@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/scentpapa/v1/order")
 @RequiredArgsConstructor
@@ -64,5 +62,11 @@ public class OrderController {
     public ResponseEntity<OrderDTO> updateShippingAddress(@PathVariable Long orderId, @RequestBody UpdateShippingAddressRequest addressRequest) {
         OrderDTO order = orderService.updateShippingAddress(orderId, addressRequest.getNewAddressId());
         return ResponseEntity.ok(order);
+    }
+
+    @GetMapping("/invoice/{orderId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<byte[]> downloadInvoice(@PathVariable Long orderId) {
+        return orderService.generateInvoiceResponse(orderId);
     }
 }
