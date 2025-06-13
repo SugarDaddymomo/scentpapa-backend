@@ -1,5 +1,6 @@
 package com.scentpapa.scentpapa_backend.service.impl;
 
+import com.scentpapa.scentpapa_backend.models.Role;
 import com.scentpapa.scentpapa_backend.models.User;
 import com.scentpapa.scentpapa_backend.repository.UserRepository;
 import com.scentpapa.scentpapa_backend.requests.LoginRequest;
@@ -18,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.scentpapa.scentpapa_backend.models.Role.CUSTOMER;
 
 @Service
@@ -35,6 +39,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public ResponseEntity<?> getCurrentUserDetails(User user) {
+        Set<String> permissions = null;
+        if (user.getRole() == Role.ADMIN) {
+            permissions = user.getPermissions()
+                    .stream()
+                    .map(Enum::name)
+                    .collect(Collectors.toSet());
+        }
         UserDetailsResponse userDetailsResponse = UserDetailsResponse.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
@@ -42,6 +53,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .phoneNumber(user.getPhoneNumber())
                 .username(StringUtils.hasText(user.getUsername()) ? user.getUsername() : " ")
                 .role(user.getRole().name())
+                .permissions(permissions)
                 .build();
         return ResponseEntity.ok(userDetailsResponse);
     }

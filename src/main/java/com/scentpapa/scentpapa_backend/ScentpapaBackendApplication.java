@@ -1,5 +1,6 @@
 package com.scentpapa.scentpapa_backend;
 
+import com.scentpapa.scentpapa_backend.models.Permission;
 import com.scentpapa.scentpapa_backend.models.User;
 import com.scentpapa.scentpapa_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.scentpapa.scentpapa_backend.models.Role.ADMIN;
 
@@ -29,7 +33,11 @@ public class ScentpapaBackendApplication implements CommandLineRunner {
 		user.setPassword(passwordEncoder.encode("shiV@m69"));
 		user.setFirstName("Admin");
 		user.setPhoneNumber("+918527077014");
-
+		Set<Permission> permissions = new HashSet<>();
+		permissions.add(Permission.ADMIN);
+		permissions.add(Permission.CATEGORY);
+		permissions.add(Permission.PRODUCTS);
+		user.setPermissions(permissions);
 		try {
 			userRepository.save(user);
 		} catch (Exception e) {

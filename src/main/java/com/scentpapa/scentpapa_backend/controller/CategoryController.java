@@ -18,7 +18,7 @@ public class CategoryController {
 
     // Create a new category
     @PostMapping("/admin/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('PERMISSION_CATEGORY')")
     public ResponseEntity<Category> createCategory(
             @RequestParam String name,
             @RequestParam(required = false) Long parentId) {
@@ -28,7 +28,7 @@ public class CategoryController {
 
     // Optionally: Fetch all categories (also restricted to admins)
     @GetMapping("/admin/list")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') and hasAuthority('PERMISSION_CATEGORY')")
     public ResponseEntity<?> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }

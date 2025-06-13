@@ -39,6 +39,10 @@ public class AuthServiceImpl implements AuthService {
                 .phoneNumber(request.getPhoneNumber())
                 .role(CUSTOMER)
                 .password(passwordEncoder.encode(request.getPassword()))
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .enabled(true)
+                .credentialsNonExpired(true)
                 .build();
 
         userRepository.save(user);
